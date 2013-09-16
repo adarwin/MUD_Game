@@ -9,127 +9,153 @@
 
 using namespace std;
 
-//class PC;
-//class Animal;
-//class NPC;
 
 int main() {
-    string input;
     PC* pc;
-    /*
-    vector<Room> rooms;
-    rooms.reserve(10);
-    Room a("a");
-    Room b("b");
-    Room c;
-    Room d;
-    Room e;
-    Room f;
-    Room g;
-    a.south = &b;
-    b.north = &a;
-    b.south = &c;
-    vector<Creature> creatures;
-    creatures.reserve(40);
-    creatures.push_back(Creature());
-    creatures.push_back(Animal("Jamie"));
-    for (int i = 0; i < creatures.size(); i++) {
-        a.addCreature(&creatures[i]);
-    }
-    for (int i = 0; i < a.creatures.size(); i++) {
-        cout << "Creature name = " << a.creatures[i]->getName() << endl;
-    }
-    cout << "Capacity = " << rooms.capacity() << endl;
-    cout << "Size = " << rooms.size() << endl;
-    cout << "a.south = " << a.south << endl;
-    cout << "a.south->getName() = " << a.south->getName() << endl;
-    cout << "Address of b = " << &b << endl;
-    PC pc ("Squash");
-    cout << "Enter a command: ";
-    */
+    cout << endl << " -------------------------------"
+         << endl << "| Reading from standard input..." << endl;
     // Get number of rooms
     int numRooms;
     cin >> numRooms;
-    cout << "Number of rooms = " << numRooms << endl;
+    cout << "|" << endl;
+    cout << "|   Apparently, there should be " << numRooms
+         << " rooms, with names 0 - " << numRooms-1 << endl;
+    //cout << "  Requested number of rooms = " << numRooms << endl;
     // Create the rooms
     vector<Room*> rooms;
     rooms.reserve(numRooms);
     for (int i = 0; i < numRooms; i++) {
+        rooms[i] = new Room(i);
+    }
+    cout << "|    ---------------------" << endl
+         << "|...| Let's get to that..." << endl;
+    for (int i = 0; i < numRooms; i++) {
         int state, north, south, east, west;
         cin >> state >> north >> south >> east >> west;
-        Room* temp = new Room(i, state);
-        cout << "Room " << temp->getName() << " is " << temp->getStateString() << endl;
+        cout << "|...|   Creating room " << i << " with state: " << state << endl;
+        //Room* temp = new Room(i, state);
+        Room* temp = rooms[i];
+        temp->state = state;
+        //cout << "Room " << temp->getName() << " is " << temp->getStateString() << endl;
         if (north != -1) {
             temp->north = rooms[north];
+            cout << "|...|     ...with neighbor to the North: room "
+                 << temp->north->getName() << endl;
             //cout << "  To the north is room " << temp.north->getName() << endl;
         } else {
             temp->north = NULL;
         }
         if (south != -1) {
-            temp->south = rooms[south];
+            temp->south = rooms[south];//rooms[south];
+            cout << "|...|     ...with neighbor to the South: room "
+                 << temp->south->getName() << endl;
             //cout << "  To the south is room " << temp.south->getName() << endl;
         } else {
             temp->south = NULL;
         }
         if (east != -1) {
             temp->east = rooms[east];
+            cout << "|...|     ...with neighbor to the East: room "
+                 << temp->east->getName() << endl;
             //cout << "  To the east is room " << temp.east->getName() << endl;
         } else {
             temp->east = NULL;
         }
         if (west != -1) {
             temp->west = rooms[west];
+            cout << "|...|     ...with neighbor to the West: room "
+                 << temp->west->getName() << endl;
             //cout << "  To the west is room " << temp.west->getName() << endl;
         } else {
             temp->west = NULL;
         }
-        rooms.push_back(temp);
+        rooms[i] = temp;//.push_back(temp);
     }
+    cout << "|...| Done creating rooms!" << endl
+         << "|    ---------------------" << endl;
     // Get number of creatures
     int numCreatures;
     cin >> numCreatures;
-    cout << "Number of creatures = " << numCreatures << endl;
+    cout << "|" << endl;
+    cout << "|   The input seems to indicate we should " << endl
+         << "|   create " << numCreatures
+         << " creatures with names 0 - " << numCreatures-1 << endl;
     // Create the creatures
     vector<Creature*> creatures;
     creatures.reserve(numCreatures);
+    cout << "|    --------------------" << endl
+         << "|...| Alright, here goes!" << endl;
     for (int i = 0; i < numCreatures; i++) {
         int creatureType, location;
         cin >> creatureType >> location;
         Creature* newCreatureReference;
+        cout << "|...|   Creating creature, ";
         if (creatureType == 0) {
             // PC
+            cout << "PC " << i;
             pc = new PC(i, rooms[location]);
             newCreatureReference = pc;
             //PC temp(i, &rooms[location]);
             //newCreatureReference = temp;
         } else if (creatureType == 1) {
             // Animal
+            cout << "Animal " << i;
             newCreatureReference = new Animal(i, rooms[location]);
         } else if (creatureType == 2) {
             // NPC
+            cout << "NPC " << i;
             newCreatureReference = new NPC(i, rooms[location]);
         }
+        cout << " and assigning it to room " << location << endl;
+        /*
         cout << "Creature " << newCreatureReference->getName()
              << " is of type, " << newCreatureReference->getType()
              << " and references room " << newCreatureReference->currentRoom->getName()
              << endl;
+        */
         creatures.push_back(newCreatureReference);
         rooms[location]->addCreature(newCreatureReference);
     }
+    cout << "|...| Finished making the creatures!" << endl
+         << "|    -------------------------------" << endl;
+    cout << "|" << endl;
+    cout << "| Finished reading input" << endl
+         << " ----------------------------" << endl;
+
+    cout << endl;
+    cout << " -----------------" << endl
+         << "| Beginning game " << endl;
+    string input;
     while (cin >> input) {
+        cout << "|" << endl;
+        cout << "| Command: " << input << endl;
         if (input == "exit") {
             break;
         } else if (input == "look") {
             pc->look();
-            cout << "looked" << endl;
+            //cout << "looked" << endl;
+        } else if (input == "clean") {
+            pc->clean();
+        } else if (input == "dirty") {
+            pc->dirty();
+        } else if (input == "north") {
+            pc->moveToRoom(pc->currentRoom->north);
+        } else if (input == "south") {
+            pc->moveToRoom(pc->currentRoom->south);
+        } else if (input == "east") {
+            pc->moveToRoom(pc->currentRoom->east);
+        } else if (input == "west") {
+            pc->moveToRoom(pc->currentRoom->west);
         }
-        cout << "Enter a command: " << endl;
+        //cout << "Enter a command: " << endl;
     }
+    cout << "| Ending Game..." << endl
+         << " ---------------" << endl;
     // Release resources
-    for (int i = 0; i < rooms.size(); i++) {
+    for (unsigned int i = 0; i < rooms.size(); i++) {
         delete rooms[i];
     }
-    for (int i = 0; i < creatures.size(); i++) {
+    for (unsigned int i = 0; i < creatures.size(); i++) {
         delete creatures[i];
     }
     return 0;

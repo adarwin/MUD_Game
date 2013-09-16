@@ -9,6 +9,10 @@ class Animal : public Creature {
         Animal(int);
         Animal(int, Room*);
         std::string getType() const;
+        bool happyAboutStateChange(int, int) const;
+        void issuePositiveResponse();
+        void issueNegativeResponse();
+        //void clean();
     private:
 };
 #endif

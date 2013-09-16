@@ -10,12 +10,15 @@ class Creature {
         Creature(int, Room*);
         ~Creature();
         int getName() const;
-        virtual void issuePositiveResponse() const;
-        virtual void issueNegativeResponse() const;
+        virtual void issuePositiveResponse();
+        virtual void issueNegativeResponse();
         virtual void look() const;
         Room* currentRoom;
         virtual std::string getType() const;
         std::string getStringOutput() const;
+        virtual void clean();
+        virtual bool happyAboutStateChange(int, int) const = 0;
+        void moveToRoom(Room*);
 
     private:
         void init(int name, Room* room);

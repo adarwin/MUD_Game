@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
 
 class Creature;
 
@@ -30,16 +31,20 @@ class Room {
             return output;
         }
         bool addCreature(Creature*);
+        bool removeCreature(Creature*);
         std::vector<Creature*> creatures;
+        void cleanRoom();
+        void dirtyRoom();
+        int state;
 
     private:
-        static const int maxNumCreatures = 10;
+        void notifyCreatures(int, int);
+        static const unsigned int maxNumCreatures = 10;
         void init(int name, int state);
-        int state;
         int name;
-        static const int dirty = 0;
+        static const int clean = 0;
         static const int half_dirty = 1;
-        static const int clean = 2;
+        static const int dirty = 2;
 };
 std::ostream& operator<< (std::ostream& out, const Room& obj);
 #endif
