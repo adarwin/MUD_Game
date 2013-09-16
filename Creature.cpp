@@ -61,7 +61,7 @@ bool Creature::respondToStateChange(int previousState, int newState) {
 }
 void Creature::leaveRoom() {
     for (;;) {
-        int choice = rand() % 3;
+        int choice = rand() % 4;
         if (choice == 0 && currentRoom->north != NULL) {
             moveToRoom(currentRoom->north);
             break;
