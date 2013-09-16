@@ -14,13 +14,14 @@ int main() {
     PC* pc;
     cout << endl << " -------------------------------"
          << endl << "| Reading from standard input..." << endl;
+
     // Get number of rooms
     int numRooms;
     cin >> numRooms;
     cout << "|" << endl;
     cout << "|   Apparently, there should be " << numRooms
          << " rooms, with names 0 - " << numRooms-1 << endl;
-    //cout << "  Requested number of rooms = " << numRooms << endl;
+
     // Create the rooms
     vector<Room*> rooms;
     rooms.reserve(numRooms);
@@ -152,10 +153,10 @@ int main() {
     cout << "| Ending Game..." << endl
          << " ---------------" << endl;
     // Release resources
-    for (unsigned int i = 0; i < rooms.size(); i++) {
+    for (int i = 0; i < numRooms; i++) {
         delete rooms[i];
     }
-    for (unsigned int i = 0; i < creatures.size(); i++) {
+    for (unsigned int i = 0; i < numCreatures; i++) {
         delete creatures[i];
     }
     return 0;

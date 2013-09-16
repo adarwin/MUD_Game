@@ -16,6 +16,7 @@ class PC : public Creature {
         void dirty();
         bool happyAboutStateChange(int, int) const;
         static int respect;
+        static void increaseRespectBy(int);
         /*
         void issuePositiveResponse();
         void issueNegativeResponse();

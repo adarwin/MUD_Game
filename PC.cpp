@@ -25,6 +25,12 @@ bool PC::happyAboutStateChange(int, int) const {
     return true;
 }
 
+void PC::increaseRespectBy(int change) {
+    cout << "| Respect changed from " << respect << " to ";
+    respect += change;
+    cout << respect << endl;
+}
+
 void PC::look() const {
     //cout << "|" << endl;
     cout << "| PC looks around room " << currentRoom->getName() << endl;

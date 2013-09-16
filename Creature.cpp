@@ -2,6 +2,7 @@
 #include "Creature.h"
 #include "Room.h"
 #include <sstream>
+#include <cstdlib>
 
 using namespace std;
 
@@ -41,8 +42,45 @@ void Creature::issueNegativeResponse() {
 std::string Creature::getType() const {
     return "Creature";
 }
-//bool Creature::happyAboutStateChange(int previousState, int newState) const {
-//}
+bool Creature::respondToStateChange(int previousState, int newState) {
+    /*
+    bool willLeaveRoomIfUpset = newState == Room::clean ||
+                                newState == Room::dirty;
+                                */
+    if (happyAboutStateChange(previousState, newState)) {
+        issuePositiveResponse();
+    } else {
+        issueNegativeResponse();
+        //if (willLeaveRoomIfUpset) {
+            //cout << "| Creature should leave the room" << endl;
+            return true;
+            //leaveRoom();
+        //}
+    }
+    return false;
+}
+void Creature::leaveRoom() {
+    for (;;) {
+        int choice = rand() % 3;
+        if (choice == 0 && currentRoom->north != NULL) {
+            moveToRoom(currentRoom->north);
+            break;
+        } else if (choice == 1 && currentRoom->south != NULL) {
+            moveToRoom(currentRoom->south);
+            break;
+        } else if (choice == 2 && currentRoom->east != NULL) {
+            moveToRoom(currentRoom->east);
+            break;
+        } else if (choice == 3 && currentRoom->west != NULL) {
+            moveToRoom(currentRoom->west);
+            break;
+        }
+    }
+    fixRoom();
+}
+void Creature::fixRoom() {
+    currentRoom->state = Room::half_dirty;
+}
 void Creature::moveToRoom(Room* newRoom) {
     if (newRoom != NULL) {
         bool removalSuccessful = currentRoom->removeCreature(this);

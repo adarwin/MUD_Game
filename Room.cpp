@@ -1,11 +1,13 @@
 #include <vector>
 #include <string>
+#include <list>
 #include "Room.h"
 #include "Creature.h"
 using std::cout;
 using std::endl;
 using std::vector;
 using std::string;
+using std::list;
 
 Room::~Room() {
     cout << "Getting rid of room" << endl;
@@ -71,14 +73,16 @@ void Room::cleanRoom() {
 }
 void Room::notifyCreatures(int previousState, int newState) {
     unsigned int numCreatures = creatures.size();
+    vector<Creature*> removeList;
     for (unsigned int i = 0; i < numCreatures; i++) {
         if (creatures[i]->getType() != "PC") {
-            if (creatures[i]->happyAboutStateChange(previousState, newState)) {
-                creatures[i]->issuePositiveResponse();
-            } else {
-                creatures[i]->issueNegativeResponse();
+            if (creatures[i]->respondToStateChange(previousState, newState)) {
+                removeList.push_back(creatures[i]);
             }
         }
+    }
+    for (unsigned int i = 0; i < removeList.size(); i++) {
+        removeList.at(i)->leaveRoom();
     }
 }
 void Room::dirtyRoom() {

@@ -20,16 +20,22 @@ void NPC::issuePositiveResponse() {
     cout << "| " << getType() << " " << getName()
          << " likes dirty rooms and is happy with you for dirtying this one"
          << endl;
+    PC::increaseRespectBy(1);
+    /*
     cout << "|   Your respect has now increased from "
          << PC::respect << " to ";
-    cout << --PC::respect << endl;
+    cout << ++PC::respect << endl;
+    */
 }
 void NPC::issueNegativeResponse() {
     cout << "| " << getType() << " " << getName()
          << " likes dirty rooms and despises you for cleaning this one"
          << endl;
+    PC::increaseRespectBy(-1);
+    /*
     cout << "|   Consequently, your respect has been decreased from "
          << PC::respect << " to ";
     cout << --PC::respect << endl;
+    */
 }
 

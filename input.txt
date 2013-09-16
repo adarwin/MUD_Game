@@ -9,9 +9,11 @@
 2 1
 look
 clean
-2:clean
 east
 look
-0:clean
+clean
 look
+south
+look
+clean
 exit
