@@ -12,8 +12,11 @@ using namespace std;
 
 int main() {
     PC* pc;
-    cout << endl << " -------------------------------"
-         << endl << "| Reading from standard input..." << endl;
+    cout << endl
+         << " ----------------------------------------------------------------"
+         << endl
+         << "| Reading from standard input..."
+         << endl;
 
     // Get number of rooms
     int numRooms;
@@ -28,7 +31,7 @@ int main() {
     for (int i = 0; i < numRooms; i++) {
         rooms[i] = new Room(i);
     }
-    cout << "|    ---------------------" << endl
+    cout << "|    ------------------------------------------" << endl
          << "|...| Let's get to that..." << endl;
     for (int i = 0; i < numRooms; i++) {
         int state, north, south, east, west;
@@ -73,7 +76,7 @@ int main() {
         rooms[i] = temp;//.push_back(temp);
     }
     cout << "|...| Done creating rooms!" << endl
-         << "|    ---------------------" << endl;
+         << "|    ------------------------------------------" << endl;
     // Get number of creatures
     int numCreatures;
     cin >> numCreatures;
@@ -84,13 +87,13 @@ int main() {
     // Create the creatures
     vector<Creature*> creatures;
     creatures.reserve(numCreatures);
-    cout << "|    --------------------" << endl
+    cout << "|    ------------------------------------------" << endl
          << "|...| Alright, here goes!" << endl;
     for (int i = 0; i < numCreatures; i++) {
         int creatureType, location;
         cin >> creatureType >> location;
         Creature* newCreatureReference;
-        cout << "|...|   Creating creature, ";
+        cout << "|...|   Creating ";
         if (creatureType == 0) {
             // PC
             cout << "PC " << i;
@@ -118,18 +121,20 @@ int main() {
         rooms[location]->addCreature(newCreatureReference);
     }
     cout << "|...| Finished making the creatures!" << endl
-         << "|    -------------------------------" << endl;
+         << "|    ------------------------------------------" << endl;
     cout << "|" << endl;
     cout << "| Finished reading input" << endl
-         << " ----------------------------" << endl;
+         << " ----------------------------------------------------------------"
+         << endl;
 
-    cout << endl;
-    cout << " -----------------" << endl
-         << "| Beginning game " << endl;
+    cout << endl << endl << endl;
+    cout << " ----------------------------------------------------------------"
+         << endl << "| Beginning game " << endl;
     string input;
-    while (cin >> input) {
-        cout << "|" << endl;
-        cout << "| Command: " << input << endl;
+    cout << "|" << endl;
+    cout << "| Command: ";
+    while (PC::respect > 0 && PC::respect < 80 && cin >> input) {
+        cout << input << endl;
         if (input == "exit") {
             break;
         } else if (input == "look") {
@@ -148,16 +153,33 @@ int main() {
         } else if (input == "west") {
             pc->moveToRoom(pc->currentRoom->west);
         }
+        cout << "|" << endl;
+        cout << "| Command: ";
         //cout << "Enter a command: " << endl;
     }
-    cout << "| Ending Game..." << endl
-         << " ---------------" << endl;
+    cout << "|" << endl;
+    if (PC::respect <= 0) {
+        cout << "| Your respect has dropped too low. You lose." << endl;
+    } else if (PC::respect >= 80) {
+        cout << "| Congratulations! Your respect has reached 80. You win!"
+             << endl;
+    } else {
+        cout << "| Ending Game..." << endl;
+    }
+    cout << " ----------------------------------------------------------------"
+         << endl;
     // Release resources
+    cout << endl << endl << endl;
+    cout << " ------------------------------------ " << endl
+         << "| Releasing resources..." << endl
+         << "|" << endl;
     for (int i = 0; i < numRooms; i++) {
         delete rooms[i];
     }
-    for (unsigned int i = 0; i < numCreatures; i++) {
+    cout << "|" << endl;
+    for (int i = 0; i < numCreatures; i++) {
         delete creatures[i];
     }
+    cout << " ------------------------------------ " << endl;
     return 0;
 }

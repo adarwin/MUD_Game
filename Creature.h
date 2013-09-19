@@ -18,7 +18,7 @@ class Creature {
         std::string getStringOutput() const;
         virtual void clean();
         virtual bool happyAboutStateChange(int, int) const = 0;
-        void moveToRoom(Room*);
+        bool moveToRoom(Room*);
         bool respondToStateChange(int, int);
         void leaveRoom();
         void fixRoom();

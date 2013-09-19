@@ -36,6 +36,7 @@ class Room {
         void cleanRoom();
         void dirtyRoom();
         int state;
+        bool isFull() const;
         static const int clean = 0;
         static const int half_dirty = 1;
         static const int dirty = 2;

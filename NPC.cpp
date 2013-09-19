@@ -17,9 +17,8 @@ bool NPC::happyAboutStateChange(int previousState, int newState) const {
     return newState > previousState;
 }
 void NPC::issuePositiveResponse() {
-    cout << "| " << getType() << " " << getName()
-         << " likes dirty rooms and is happy with you for dirtying this one"
-         << endl;
+    cout << "| " << getStringOutput()
+         << " bakes you a cake for dirtying the room" << endl;
     PC::increaseRespectBy(1);
     /*
     cout << "|   Your respect has now increased from "
@@ -28,8 +27,7 @@ void NPC::issuePositiveResponse() {
     */
 }
 void NPC::issueNegativeResponse() {
-    cout << "| " << getType() << " " << getName()
-         << " likes dirty rooms and despises you for cleaning this one"
+    cout << "| " << getStringOutput() << " stabs you for cleaning the room"
          << endl;
     PC::increaseRespectBy(-1);
     /*

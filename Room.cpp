@@ -3,6 +3,7 @@
 #include <list>
 #include "Room.h"
 #include "Creature.h"
+
 using std::cout;
 using std::endl;
 using std::vector;
@@ -10,7 +11,7 @@ using std::string;
 using std::list;
 
 Room::~Room() {
-    cout << "Getting rid of room" << endl;
+    cout << "| Getting rid of room " << getName() << endl;
 }
 
 Room::Room(int name) {
@@ -22,7 +23,7 @@ Room::Room(int name, int state) {
 void Room::init(int name, int state) {
     this->name = name;
     this->state = state;
-    vector<Creature*> creatures;
+    //vector<Creature*> creatures;
     creatures.reserve(maxNumCreatures);
 }
 int Room::getState() const {
@@ -35,7 +36,7 @@ string Room::getStateString() const {
     return getStateString(state);
 }
 bool Room::addCreature(Creature* newCreature) {
-    if (creatures.size() < maxNumCreatures) {
+    if (!isFull()) {
         creatures.push_back(newCreature);
         return true;
     } else {
@@ -52,6 +53,9 @@ bool Room::removeCreature(Creature* targetCreature) {
         }
     }
     return false;
+}
+bool Room::isFull() const {
+    return creatures.size() >= maxNumCreatures;
 }
 void Room::cleanRoom() {
     bool shouldNotify = true;
@@ -107,17 +111,17 @@ std::ostream& operator<< (std::ostream& out, const Room& room) {
     out << "| Room " << room.getName() << ", currently "
         << room.getStateString() << ":" << endl;
     if (room.north != NULL) {
-        out << "|   To the North, lies room " << room.north->getName() << endl;
+        out << "|   To the North: room " << room.north->getName() << endl;
     }
     if (room.south != NULL) {
-        out << "|   To the South, exists room " << room.south->getName()
+        out << "|   To the South: room " << room.south->getName()
             << endl;
     }
     if (room.east != NULL) {
-        out << "|   To the East, is room " << room.east->getName() << endl;
+        out << "|   To the East: room " << room.east->getName() << endl;
     }
     if (room.west != NULL) {
-        out << "|   To the West, is situated room " << room.west->getName()
+        out << "|   To the West: room " << room.west->getName()
             << endl;
     }
     out << "|   Contains..." << endl;

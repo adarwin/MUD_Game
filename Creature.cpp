@@ -18,7 +18,7 @@ void Creature::init(int name, Room* room) {
     this->currentRoom = room;
 }
 Creature::~Creature() {
-    cout << "Getting rid of the creature object" << endl;
+    cout << "| Getting rid of " << getStringOutput() << endl;
 }
 
 void Creature::look() const {
@@ -60,47 +60,64 @@ bool Creature::respondToStateChange(int previousState, int newState) {
     return false;
 }
 void Creature::leaveRoom() {
-    for (;;) {
-        int choice = rand() % 4;
-        if (choice == 0 && currentRoom->north != NULL) {
-            moveToRoom(currentRoom->north);
-            break;
-        } else if (choice == 1 && currentRoom->south != NULL) {
-            moveToRoom(currentRoom->south);
-            break;
-        } else if (choice == 2 && currentRoom->east != NULL) {
-            moveToRoom(currentRoom->east);
-            break;
-        } else if (choice == 3 && currentRoom->west != NULL) {
-            moveToRoom(currentRoom->west);
-            break;
-        }
+    vector<Room*> availableRooms;
+    availableRooms.reserve(4);
+    if (currentRoom->north != NULL && !currentRoom->north->isFull()) {
+        availableRooms.push_back(currentRoom->north);
     }
-    fixRoom();
+    if (currentRoom->south != NULL && !currentRoom->south->isFull()) {
+        availableRooms.push_back(currentRoom->south);
+    }
+    if (currentRoom->east != NULL && !currentRoom->east->isFull()) {
+        availableRooms.push_back(currentRoom->east);
+    }
+    if (currentRoom->west != NULL && !currentRoom->west->isFull()) {
+        availableRooms.push_back(currentRoom->west);
+    }
+    if (availableRooms.size() == 0) {
+        // No rooms available
+        currentRoom->removeCreature(this);
+        cout << "| All neighboring rooms are full. " << getStringOutput()
+             << " drills a whole in the roof and escapes from the world"
+             << endl;
+    } else {
+        int choice = rand() % availableRooms.size();
+        moveToRoom(availableRooms[choice]);
+        fixRoom();
+    }
 }
 void Creature::fixRoom() {
     currentRoom->state = Room::half_dirty;
 }
-void Creature::moveToRoom(Room* newRoom) {
+bool Creature::moveToRoom(Room* newRoom) {
+    bool roomFull = false;
     if (newRoom != NULL) {
-        bool removalSuccessful = currentRoom->removeCreature(this);
-        if (!removalSuccessful) {
-            cout << "| Failed to remove " << getStringOutput()
-                 << " from room " << currentRoom->getName() << endl;
-        }
-        cout << "| " << getStringOutput() << " moves from room "
-             << currentRoom->getName() << " to room " << newRoom->getName()
-             << endl;
-        currentRoom = newRoom;
-        bool additionSuccessful = currentRoom->addCreature(this);
-        if (!additionSuccessful) {
-            cout << "| Failed to add " << getStringOutput()
-                 << " to room " << currentRoom->getName() << endl;
+        if (!newRoom->isFull()) {
+            bool additionSuccessful = newRoom->addCreature(this);
+            if (!additionSuccessful) {
+                cout << "| Failed to add " << getStringOutput()
+                     << " to room " << newRoom->getName() << endl;
+            }
+            bool removalSuccessful = currentRoom->removeCreature(this);
+            if (!removalSuccessful) {
+                cout << "| Failed to remove " << getStringOutput()
+                     << " from room " << currentRoom->getName() << endl;
+            }
+            cout << "| " << getStringOutput() << " moves from room "
+                 << currentRoom->getName() << " to room " << newRoom->getName()
+                 << endl;
+            currentRoom = newRoom;
+        } else {
+            // Room is full, try another
+            cout << "| " << getStringOutput() << " cannot move to room "
+                 << newRoom->getName() << " because it is full" << endl;
+            roomFull = true;
         }
     } else {
-        cout << "| Cannot move " << getStringOutput()
-             << " to the desired 'room' because it does not exist" << endl;
+        cout << "| " << getStringOutput() << " cannot move to the desired "
+             << "'room' because it does not exist" << endl;
     }
+    return roomFull;
 }
 std::string Creature::getStringOutput() const {
     stringstream ss;

@@ -21,9 +21,8 @@ bool Animal::happyAboutStateChange(int previousState, int newState) const {
 }
 
 void Animal::issuePositiveResponse() {
-    cout << "| " << getType() << " " << getName()
-         << " likes clean rooms and wags its tail in delight at you cleaning "
-         << "this one" << endl;
+    cout << "| " << getStringOutput()
+         << " wags its tail at you for cleaning the room" << endl;
     PC::increaseRespectBy(1);
     /*
     cout << "|   Your respect has now increased from "
@@ -33,8 +32,8 @@ void Animal::issuePositiveResponse() {
 }
 
 void Animal::issueNegativeResponse() {
-    cout << "| " << getType() << " " << getName()
-         << " likes clean rooms and bites you for dirtying this one" << endl;
+    cout << "| " << getStringOutput() << " bites you for dirtying the room"
+         << endl;
     PC::increaseRespectBy(-1);
     /*
     cout << "|   Consequently, your respect has decreased from "
